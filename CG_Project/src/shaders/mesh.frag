@@ -40,11 +40,9 @@ void main()
    
     //frag_color = vec4(output_color, 1.0);
 
-    vec3 color = texture(u_cubemap, R).rgb; //texture lookup
+    //vec3 color = texture(u_cubemap, R).rgb; //texture lookup
 
-    frag_color = vec4(color, 1.0);
-   
-    
+    frag_color = vec4(output_color, 1.0);
 
     //vec3 N = normalize(v_normal);
     //frag_color = vec4(0.5 * N + 0.5, 1.0);

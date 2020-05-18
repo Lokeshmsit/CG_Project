@@ -51,8 +51,9 @@ include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/../external/lodepng")
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/../external/imgui" PROJECT_SRCS)
 include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/../external/imgui")
 
+file(GLOB SRC . *.cpp)
 # Add executable for project
-add_executable(${PROJECT_NAME} ${PROJECT_SRCS})
+add_executable(${PROJECT_NAME} ${PROJECT_SRCS} ${SRC})
 
 # Link executable to libraries
 target_link_libraries(${PROJECT_NAME} glfw ${PROJECT_LIBRARIES} ${GLFW_LIBRARIES})
