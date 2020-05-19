@@ -11,13 +11,15 @@
 #include <vector>
 
 // The attribute locations we will use in the vertex shader
-enum AttributeLocation { POSITION = 0, NORMAL = 1 };
+enum AttributeLocation { POSITION = 0, NORMAL = 1, TEXTURE = 2 };
 
 struct MeshVAO {
   GLuint vao;
   GLuint vertexVBO;
   GLuint normalVBO;
   GLuint indexVBO;
+  GLuint textureVBO;
+  GLuint texture;
   int numVertices;
   int numIndices;
 };

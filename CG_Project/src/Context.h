@@ -10,6 +10,8 @@
 class Terrain;
 class Camera;
 struct Trackball;
+class Skybox;
+class Model;
 // Struct for resources and state
 struct Context {
 
@@ -26,8 +28,12 @@ struct Context {
   GLuint cubemap;
   Terrain *terrain;
   Camera *camera;
+  Skybox *skybox;
+  Model *skydome;
+  //--add your own here
 
   //-----Rendering -----
+  glm::mat4 projection;
   glm::vec4 lightColor = glm::vec4{1.0f, 1.0f, 1.0f, 1.0f};
   glm::vec3 lightPosition = glm::vec3{1.0, 1.0, 1.0};
   bool enableLight = true;
@@ -47,7 +53,7 @@ struct Context {
   float zoomFactorOrtho = 0.15;
   float zoomFactorPerspective = 5.0f;
   float zoom = 0.f;
-  float fov = 50.0f;
+  float fov = 45.0f;
   float elapsed_time;
 };
 

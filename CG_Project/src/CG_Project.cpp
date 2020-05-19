@@ -15,6 +15,8 @@
 
 #include "Camera.h"
 #include "Terrain.h"
+#include <Model.h>
+#include <Skybox.h>
 #include <algorithm>
 #include <cstdlib>
 #include <glm/gtc/type_ptr.hpp>
@@ -25,21 +27,19 @@
 #include <utils.h>
 #include <utils2.h>
 
-void initializeTrackball(Context &ctx) {
-  // double radius = double(std::min(ctx.width, ctx.height)) / 2.0;
-  // ctx.trackball->radius = radius;
-  // glm::vec2 center = glm::vec2(ctx.width, ctx.height) / 2.0f;
-  // ctx.trackball->center = center;
-}
-
 void init(Context &ctx) {
 
   /*-------terrain -------*/
   Terrain *terrain = new Terrain;
-  terrain->load(modelDir() + "Small Tropical Island/Small Tropical Island.obj");
-  terrain->setShader(
-      new Shader(shaderDir() + "mesh.vert", shaderDir() + "mesh.frag"));
-  terrain->rotate(180.f, glm::vec3(0.f, 0.f, 1.f));
+  terrain->load(modelDir() + "red-sculpted-plains-terrain/source/"
+                             "RedSculptedPlains Mesh Output/RedSculptedPlains "
+                             "Mesh Output 2.obj");
+  Shader *shader =
+      new Shader(shaderDir() + "mesh.vert", shaderDir() + "mesh.frag");
+  terrain->setShader(shader);
+  terrain->scale(glm::vec3(300.f, 300.f, 300.f));
+  terrain->rotate(-90.f, glm::vec3(1.f, 0.f, 0.f));
+
   ctx.terrain = terrain;
 
   /*-------camera -------*/
@@ -47,10 +47,18 @@ void init(Context &ctx) {
       new Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f),
                  glm::vec3(0.0f, 1.0f, 0.0f));
 
-  // Load cubemap texture(s)
-  ctx.cubemap = loadCubemap(cubemapDir() + "/Forrest/");
+  ctx.skydome = new Model;
+  ctx.skydome->load(modelDir() + "Skydome3D/Skydome.obj");
+  ctx.skydome->scale(glm::vec3(2.f, 2.f, 2.f));
+  ctx.skydome->setShader(shader);
 
-  initializeTrackball(ctx);
+  /*ctx.skybox = new Skybox(cubemapDir() + "/Forest/");
+  ctx.skybox->setShader(
+      new Shader(shaderDir() + "skybox.vert", shaderDir() + "skybox.frag"));*/
+
+  ctx.projection =
+      glm::perspective(glm::radians(ctx.fov),
+                       (float)ctx.width / (float)ctx.height, 0.1f, 1000.0f);
 }
 
 void display(Context &ctx) {
@@ -60,7 +68,8 @@ void display(Context &ctx) {
 
   glEnable(GL_DEPTH_TEST); // ensures that polygons overlap correctly
   ctx.terrain->Render(ctx);
-  // drawMesh(ctx, ctx.program, ctx.meshVAO);
+  // ctx.skybox->Render(ctx);
+  ctx.skydome->Render(ctx);
 }
 
 void drawImGuiControls(Context &ctx) {

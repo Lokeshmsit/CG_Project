@@ -7,21 +7,15 @@ bool firstMouse = true;
 
 void mouseButtonPressed(Context *ctx, int button, int x, int y) {
   if (button == GLFW_MOUSE_BUTTON_LEFT) {
-    ctx->trackball->center = glm::vec2(x, y);
-    // trackballStartTracking(*ctx->trackball, glm::vec2(x, y));
   }
 }
 
 void mouseButtonReleased(Context *ctx, int button, int x, int y) {
   if (button == GLFW_MOUSE_BUTTON_LEFT) {
-    // trackballStopTracking(*ctx->trackball);
   }
 }
 
 void moveTrackball(Context *ctx, int x, int y) {
-  if (ctx->trackball->tracking) {
-    // trackballMove(*ctx->trackball, glm::vec2(x, y));
-  }
 
   if (firstMouse) {
     lastX = x;
@@ -96,8 +90,8 @@ void resizeCallback(GLFWwindow *window, int width, int height) {
   ctx->width = width;
   ctx->height = height;
   ctx->aspect = float(width) / float(height);
-  ctx->trackball->radius = double(std::min(width, height)) / 2.0;
-  ctx->trackball->center = glm::vec2(width, height) / 2.0f;
+  // ctx->trackball->radius = double(std::min(width, height)) / 2.0;
+  // ctx->trackball->center = glm::vec2(width, height) / 2.0f;
   glViewport(0, 0, width, height);
 }
 

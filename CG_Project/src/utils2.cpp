@@ -158,7 +158,7 @@ bool objMeshUVLoad(OBJMeshUV &mesh, const std::string &filename) {
   std::string line;
   glm::vec3 vertex;
   glm::vec3 normal;
-  glm::vec3 texcoord;
+  glm::vec2 texcoord;
   std::uint32_t vindex[3];
   std::uint32_t tindex[3];
   std::uint32_t nindex[3];
@@ -180,7 +180,7 @@ bool objMeshUVLoad(OBJMeshUV &mesh, const std::string &filename) {
       tmp_mesh.vertices.push_back(vertex);
     } else if (line.substr(0, 3) == TEXCOORD_LINE) {
       std::istringstream ss(line.substr(3));
-      ss >> texcoord.x >> texcoord.y >> texcoord.z;
+      ss >> texcoord.x >> texcoord.y; //>> texcoord.z;
       tmp_mesh.texcoords.push_back(texcoord);
     } else if (line.substr(0, 3) == NORMAL_LINE) {
       std::istringstream ss(line.substr(3));
@@ -328,6 +328,59 @@ void createMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO) {
   glEnableVertexAttribArray(NORMAL);
   glVertexAttribPointer(NORMAL, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVAO->indexVBO);
+  GLuint defaultVAO;
+  glBindVertexArray(defaultVAO); // unbinds the VAO
+
+  // Additional information required by draw calls
+  meshVAO->numVertices = mesh.vertices.size();
+  meshVAO->numIndices = mesh.indices.size();
+}
+
+void createUVMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO) {
+  // Generates and populates a VBO for the vertices
+  glGenBuffers(1, &(meshVAO->vertexVBO));
+  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->vertexVBO);
+  auto verticesNBytes = mesh.vertices.size() * sizeof(mesh.vertices[0]);
+  glBufferData(GL_ARRAY_BUFFER, verticesNBytes, mesh.vertices.data(),
+               GL_STATIC_DRAW);
+
+  // Generates and populates a VBO for the vertex normals
+  glGenBuffers(1, &(meshVAO->normalVBO));
+  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
+  auto normalsNBytes = mesh.normals.size() * sizeof(mesh.normals[0]);
+  glBufferData(GL_ARRAY_BUFFER, normalsNBytes, mesh.normals.data(),
+               GL_STATIC_DRAW);
+
+  // Generates and populates a VBO for the element indices
+  glGenBuffers(1, &(meshVAO->indexVBO));
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVAO->indexVBO);
+  auto indicesNBytes = mesh.indices.size() * sizeof(mesh.indices[0]);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesNBytes, mesh.indices.data(),
+               GL_STATIC_DRAW);
+
+  glGenBuffers(1, &(meshVAO->textureVBO));
+  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
+  auto textureNBytes = mesh.texcoords.size() * sizeof(mesh.texcoords[0]);
+  glBufferData(GL_ARRAY_BUFFER, textureNBytes, mesh.texcoords.data(),
+               GL_STATIC_DRAW);
+
+  // Creates a vertex array object (VAO) for drawing the mesh
+  glGenVertexArrays(1, &(meshVAO->vao));
+  glBindVertexArray(meshVAO->vao);
+
+  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->vertexVBO);
+  glEnableVertexAttribArray(POSITION);
+  glVertexAttribPointer(POSITION, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->normalVBO);
+  glEnableVertexAttribArray(NORMAL);
+  glVertexAttribPointer(NORMAL, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshVAO->indexVBO);
+
+  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->textureVBO);
+  glEnableVertexAttribArray(TEXTURE);
+  glVertexAttribPointer(TEXTURE, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
   GLuint defaultVAO;
   glBindVertexArray(defaultVAO); // unbinds the VAO
 

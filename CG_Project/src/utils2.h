@@ -43,7 +43,7 @@ struct OBJMesh {
 struct OBJMeshUV {
   std::vector<glm::vec3> vertices;
   std::vector<glm::vec3> normals;
-  std::vector<glm::vec3> texcoords;
+  std::vector<glm::vec2> texcoords;
   std::vector<std::uint32_t> indices;
 };
 
@@ -83,3 +83,5 @@ void loadMesh(const std::string &filename, OBJMesh *mesh);
 void loadUVMesh(const std::string &filename, OBJMeshUV *mesh);
 
 void createMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO);
+
+void createUVMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO);
