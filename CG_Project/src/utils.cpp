@@ -22,7 +22,7 @@ std::string shaderDir(void) {
 
 // Returns the absolute path to the 3D model directory
 std::string modelDir(void) {
-  std::string rootDir = getEnvVar("ASSIGNMENT3_ROOT");
+  std::string rootDir = getEnvVar("PROJECT_ROOT");
   if (rootDir.empty()) {
     std::cout << "Error: ASSIGNMENT3_ROOT is not set." << std::endl;
     std::exit(EXIT_FAILURE);
