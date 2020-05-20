@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include <iostream>
 
 Camera::Camera(const glm::vec3 &position, const glm::vec3 &lookAtPosition,
                const glm::vec3 &upvec)
@@ -44,11 +45,7 @@ void Camera::ProcessMouseMovement(float xoffset, float yoffset,
 
 // Processes input received from a mouse scroll-wheel event. Only requires input
 // on the vertical wheel-axis
-void Camera::ProcessMouseScroll(float yoffset) {
-
-  Position = glm::vec3(Position.x + 1.5 * yoffset, Position.y + 1.5 * yoffset,
-                       Position.z + 1.5 * yoffset);
-}
+void Camera::ProcessMouseScroll(float yoffset) { Position += yoffset * Front; }
 
 // Calculates the front vector from the Camera's (updated) Euler Angles
 void Camera::update() {
