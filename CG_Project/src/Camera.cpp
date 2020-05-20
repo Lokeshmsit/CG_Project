@@ -63,4 +63,6 @@ void Camera::update() {
                                                       // down which results in
                                                       // slower movement.
   Up = glm::normalize(glm::cross(Right, Front));
+
+  // std::cout << Up.x << ", " << Up.y << ", " << Up.z << std::endl;
 }

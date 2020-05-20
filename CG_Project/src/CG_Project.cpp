@@ -16,7 +16,9 @@
 #include "Camera.h"
 #include "Terrain.h"
 #include <Model.h>
+#include <SkyDome.h>
 #include <Skybox.h>
+
 #include <algorithm>
 #include <cstdlib>
 #include <glm/gtc/type_ptr.hpp>
@@ -43,18 +45,13 @@ void init(Context &ctx) {
   ctx.terrain = terrain;
 
   /*-------camera -------*/
-  ctx.camera =
-      new Camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, -1.0f),
-                 glm::vec3(0.0f, 1.0f, 0.0f));
+  ctx.camera = new Camera(glm::vec3(0.0f, 40.0f, 50.0f),
+                          glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0, 1, 0));
 
-  ctx.skydome = new Model;
+  ctx.skydome = new SkyDome;
   ctx.skydome->load(modelDir() + "Skydome3D/Skydome.obj");
   ctx.skydome->scale(glm::vec3(2.f, 2.f, 2.f));
   ctx.skydome->setShader(shader);
-
-  /*ctx.skybox = new Skybox(cubemapDir() + "/Forest/");
-  ctx.skybox->setShader(
-      new Shader(shaderDir() + "skybox.vert", shaderDir() + "skybox.frag"));*/
 
   ctx.projection =
       glm::perspective(glm::radians(ctx.fov),
@@ -62,13 +59,14 @@ void init(Context &ctx) {
 }
 
 void display(Context &ctx) {
+
   glClearColor(ctx.backgroudColor[0], ctx.backgroudColor[1],
                ctx.backgroudColor[2], ctx.backgroudColor[3]);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glEnable(GL_DEPTH_TEST); // ensures that polygons overlap correctly
+
   ctx.terrain->Render(ctx);
-  // ctx.skybox->Render(ctx);
   ctx.skydome->Render(ctx);
 }
 
@@ -110,11 +108,20 @@ int main(void) {
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  ctx.width = 600;
-  ctx.height = 800;
+
+  GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+  const GLFWvidmode *mode = glfwGetVideoMode(monitor);
+
+  glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+  glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+  glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+  glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+  ctx.width = mode->width;
+  ctx.height = mode->height;
   ctx.aspect = float(ctx.width) / float(ctx.height);
   ctx.window =
-      glfwCreateWindow(ctx.width, ctx.height, "Model viewer", nullptr, nullptr);
+      glfwCreateWindow(ctx.width, ctx.height, "CG Project", monitor, nullptr);
   glfwMakeContextCurrent(ctx.window);
   glfwSetWindowUserPointer(ctx.window, &ctx);
   glfwSetKeyCallback(ctx.window, keyCallback);

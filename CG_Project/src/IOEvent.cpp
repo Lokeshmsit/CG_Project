@@ -48,6 +48,11 @@ void keyCallback(GLFWwindow *window, int key, int scancode, int action,
   if (key == GLFW_KEY_R && action == GLFW_PRESS) {
     // reloadShaders(ctx);
   }
+
+  if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    std::exit(EXIT_SUCCESS);
+    // reloadShaders(ctx);
+  }
 }
 
 void charCallback(GLFWwindow *window, unsigned int codepoint) {
