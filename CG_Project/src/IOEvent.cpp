@@ -29,7 +29,7 @@ void moveTrackball(Context *ctx, int x, int y) {
   lastX = x;
   lastY = y;
 
-  ctx->camera->ProcessMouseMovement(xoffset, yoffset);
+  ctx->camera->OnMouseMovementEvent(xoffset, yoffset);
 }
 
 void errorCallback(int /*error*/, const char *description) {
@@ -106,5 +106,5 @@ void scrollCallback(GLFWwindow *window, double x, double y) {
 
   // ctx->fov += (float)ctx->zoomFactorPerspective * y;
 
-  ctx->camera->ProcessMouseScroll(y);
+  ctx->camera->OnMouseScrollEvent(y);
 }

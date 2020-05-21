@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
+
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,12 +12,10 @@ class Camera {
 
   glm::vec3 Right;
   glm::vec3 WorldUp;
-  // Euler Angles
+
   float RotateZ = -90.0f;
   float RotateX = 0.0f;
-  // Camera options
-  float MoveVelocity = 2.5f;
-  float MouseMove = 0.2f;
+  float MoveFactor = 0.2f;
 
 public:
   Camera(const glm::vec3 &position, const glm::vec3 &lookAtPosition,
@@ -26,14 +24,12 @@ public:
   void setLookAtPosition(const glm::vec3 &lookat);
   void setUpVector(const glm::vec3 &upvec);
 
-  void ProcessMouseScroll(float yoffset);
-  void ProcessMouseMovement(float xoffset, float yoffset,
-                            bool constrainPitch = true);
-  // Calculates the front vector from the Camera's (updated) Euler Angles
+  void OnMouseScrollEvent(float yoffset);
+  void OnMouseMovementEvent(float xoffset, float yoffset,
+                            bool constrain_Pitch = true);
+
   void update();
 
   glm::mat4 getCameraViewMatrix();
   void setCameraViewMatrix(const glm::mat4 &view_matrix);
 };
-
-#endif // CAMERA_H
