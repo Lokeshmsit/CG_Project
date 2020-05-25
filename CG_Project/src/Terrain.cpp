@@ -18,10 +18,16 @@ void Terrain::load(const std::string &modelPath) {
       load2DTexture(modelDir() + "red-sculpted-plains-terrain/textures/"
                                  "RSP_Wet_INV.png");
 
+  GLuint normal_texture =
+      load2DTexture(modelDir() + "red-sculpted-plains-terrain/textures/"
+                                 "RedSculptedPlains_Norm_Output_8196.png");
+
   getMeshVBO()->textureMap.insert(
       std::pair<std::string, GLuint>("Diffuse_Texture", dff_texture));
   getMeshVBO()->textureMap.insert(
       std::pair<std::string, GLuint>("Wet_Texture", wet_texture1));
+  getMeshVBO()->textureMap.insert(
+      std::pair<std::string, GLuint>("Normal_Texture", normal_texture));
 }
 
 void Terrain::Render(Context &ctx) {
@@ -81,6 +87,9 @@ void Terrain::Render(Context &ctx) {
 
   glActiveTexture(GL_TEXTURE1);
   glBindTexture(GL_TEXTURE_2D, getMeshVBO()->textureMap["Wet_Texture"]);
+
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, getMeshVBO()->textureMap["Normal_Texture"]);
 
   glDrawElements(GL_TRIANGLES, getMeshVBO()->numIndices, GL_UNSIGNED_INT, 0);
   glBindVertexArray(ctx.defaultVAO);

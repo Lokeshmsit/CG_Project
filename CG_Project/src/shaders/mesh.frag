@@ -1,7 +1,6 @@
 // Fragment shader
 #version 150
 
-in vec3 v_normal;
 in vec3 N;
 in vec3 L;
 in vec3 H;
@@ -18,6 +17,7 @@ uniform float u_specular_power;
 //uniform samplerCube u_cubemap;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
+uniform sampler2D tex2;
 
 //normalization after interpolation
 vec3 N_normalized = normalize(N);
@@ -28,19 +28,27 @@ vec3 R = reflect(-V, N);
 
 void main()
 {
-
     float normalization = (8.0 + u_specular_power) / 8.0;
-    
+
+    normal = texture(tex2, texture_corrdinate).rgb;
+    // transform normal vector to range [-1,1]
+    normal = normalize(normal * 2.0 - 1.0);  
+
+    N_normalized = normal;
+
     vec4 specular_color_tex =  texture(tex1, texture_corrdinate);
     float  spec_power = specular_color_tex.r*100+1;
     float lambertian = max(dot(L_normalized, N_normalized), 0.0);
 
     vec3 diff_color_tex =  texture(tex0, texture_corrdinate).rgb;
 
+    float gloss = 1.0 - diff_color_tex.r; 
+    float specular_power = exp2(gloss * 10.0);
+
     vec3 Ia = u_ambient_color;
     vec3 Id = diff_color_tex * u_light_color * lambertian;
     vec3 Is = u_specular_color * u_light_color
-             *  normalization * pow(max(0.0,dot(N_normalized, -H_normalized)), spec_power);
+             *  normalization * pow(max(0.0,dot(N_normalized, -H_normalized)), specular_power);
        //Ia +
     vec3 output_color = Id + Is;
 
