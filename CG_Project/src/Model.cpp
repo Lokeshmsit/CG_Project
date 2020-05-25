@@ -4,34 +4,25 @@
 #include <utils.h>
 #include <utils2.h>
 
+glm::mat4 Model::getModel() const { return model; }
+
+void Model::setModel(const glm::mat4 &value) { model = value; }
+
 Model::Model() : mesh(new OBJMeshUV), meshVAO(new MeshVAO) {}
 
 void Model::Render(Context &ctx) {
 
-  // glm::mat4 model = glm::translate(model, glm::vec3(0.f, 0.f, 0.f));
-
   glm::mat4 view = glm::mat4(ctx.camera->getCameraViewMatrix());
-  /*glm::mat4 view = glm::lookAt(
-      glm::vec3(1.0f, 0.2f, 0.5f), // position of the camera
-      glm::vec3(0.0f),             // and looks at origin
-      glm::vec3(0.0f, 1.0f, 0.0f)  // normalized vector, how camera is oriented
-      );*/
-
-  // glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(-3.0f, 0.0f,
-  // 0.0f));
 
   glm::mat4 projection =
       glm::perspective(glm::radians(ctx.fov),
                        (float)ctx.width / (float)ctx.height, 0.1f, 1000.0f);
 
-  glm::mat4 mv = view * model;
+  glm::mat4 mv = view * getModel();
   glm::mat4 mvp = projection * mv;
 
   // Activate program
   glUseProgram(_shader->getProgram());
-
-  // Pass uniforms
-  // glUniform1i(glGetUniformLocation(ctx.program, "u_cubemap"), 1);
 
   glUniformMatrix4fv(glGetUniformLocation(_shader->getProgram(), "u_mv"), 1,
                      GL_FALSE, &mv[0][0]);
@@ -65,8 +56,6 @@ void Model::Render(Context &ctx) {
   // Draw!
   glBindVertexArray(this->meshVAO->vao);
   // Bind textures
-  // glActiveTexture(GL_TEXTURE0);
-  // glBindTexture(GL_TEXTURE_2D, meshVAO->texture);
   glDrawElements(GL_TRIANGLES, this->meshVAO->numIndices, GL_UNSIGNED_INT, 0);
   glBindVertexArray(ctx.defaultVAO);
 

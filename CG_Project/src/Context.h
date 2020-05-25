@@ -38,7 +38,7 @@ struct Context {
   glm::vec3 lightPosition = glm::vec3{1.0, 1.0, 1.0};
   bool enableLight = true;
 
-  glm::vec3 ambientColor = glm::vec3(0.06, 0.6, 0.6);
+  glm::vec3 ambientColor = glm::vec3(0.01, 0.1, 0.1);
   bool enableAmbiant = true;
   glm::vec3 diffuseColor = glm::vec3{0.6, 0.6, 0.6};
   bool enableDiffuse = true;

@@ -4,8 +4,11 @@
 
 layout(location = 0) in vec4 a_position;
 layout(location = 1) in vec3 a_normal;
+layout(location = 2) in vec2 a_texture;
 
 out vec3 v_normal;
+out vec2 texture_corrdinate;
+out vec3 n_model;
 
 out vec3 V;
 out vec3 N;
@@ -19,7 +22,7 @@ uniform vec3 u_light_position;
 
 void main()
 {
-
+    n_model = a_normal;
      // Transform the vertex position to view space (eye coordinates)
     V = vec3(u_mv * a_position);
 
@@ -32,7 +35,9 @@ void main()
     //half way vector
     H = normalize(L + V); //light direction + view direction
     
-
+    texture_corrdinate.y = 1-a_texture.y;
+    texture_corrdinate.x = a_texture.x;
     v_normal = a_normal;
     gl_Position = u_mvp * a_position;
+
 }

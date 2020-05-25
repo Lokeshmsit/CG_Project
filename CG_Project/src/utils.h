@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -19,7 +20,9 @@ struct MeshVAO {
   GLuint normalVBO;
   GLuint indexVBO;
   GLuint textureVBO;
-  GLuint texture;
+
+  std::map<std::string, GLuint> textureMap;
+
   int numVertices;
   int numIndices;
 };

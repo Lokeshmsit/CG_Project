@@ -30,13 +30,16 @@ public:
   void translate(const glm::vec3 &position);
   void scale(const glm::vec3 &scale);
 
-  virtual void Render(Context &ctx);
+  virtual void Render(Context &ctx) = 0;
 
   Shader &getShader();
   void setShader(Shader *value);
 
   OBJMeshUV *getMesh() { return mesh; }
   MeshVAO *getMeshVBO() { return meshVAO; }
+
+  glm::mat4 getModel() const;
+  void setModel(const glm::mat4 &value);
 };
 
 #endif // MODEL_H

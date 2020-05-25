@@ -49,9 +49,12 @@ void init(Context &ctx) {
                           glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0, 1, 0));
 
   ctx.skydome = new SkyDome;
+  Shader *shaderSkyDome =
+      new Shader(shaderDir() + "SkyDome.vert", shaderDir() + "SkyDome.frag");
+
   ctx.skydome->load(modelDir() + "Skydome3D/Skydome.obj");
   ctx.skydome->scale(glm::vec3(2.f, 2.f, 2.f));
-  ctx.skydome->setShader(shader);
+  ctx.skydome->setShader(shaderSkyDome);
 
   ctx.projection =
       glm::perspective(glm::radians(ctx.fov),
