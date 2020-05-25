@@ -1,12 +1,12 @@
 #!/bin/bash
 
-if [ -z "$ASSIGNMENT3_ROOT" ]
+if [ -z "$PROJECT_ROOT" ]
 then
-    echo "ASSIGNMENT3_ROOT is not set"
+    echo "PROJECT_ROOT is not set"
     exit 1
 fi
 
-export CG_Project_ROOT=$ASSIGNMENT3_ROOT/CG_Project && \
+export CG_Project_ROOT=$PROJECT_ROOT/CG_Project && \
 
 # Generate build script
 cd $CG_Project_ROOT && \
