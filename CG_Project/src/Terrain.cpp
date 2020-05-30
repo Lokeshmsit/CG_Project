@@ -65,12 +65,9 @@ void Terrain::Render(Context &ctx) {
       ctx.enableAmbiant ? &ctx.ambientColor[0] : &glm::vec3(0.0f)[0]);
 
   glUniform3fv(
-      glGetUniformLocation(getShader().getProgram(), "u_diffuse_color"), 1,
-      ctx.enableDiffuse ? &ctx.diffuseColor[0] : &glm::vec3(0.0f)[0]);
-
-  glUniform3fv(
       glGetUniformLocation(getShader().getProgram(), "u_specular_color"), 1,
       ctx.enableSpecular ? &ctx.specularColor[0] : &glm::vec3(0.0f)[0]);
+
   glUniform1f(
       glGetUniformLocation(getShader().getProgram(), "u_specular_power"),
       ctx.specularPower);
@@ -78,6 +75,8 @@ void Terrain::Render(Context &ctx) {
   glUniform1i(glGetUniformLocation(getShader().getProgram(), "tex0"), 0);
 
   glUniform1i(glGetUniformLocation(getShader().getProgram(), "tex1"), 1);
+
+  glUniform1i(glGetUniformLocation(getShader().getProgram(), "tex2"), 2);
 
   // Draw!
   glBindVertexArray(getMeshVBO()->vao);

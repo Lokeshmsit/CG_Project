@@ -21,27 +21,23 @@ glm::mat4 Camera::getCameraViewMatrix() {
   return glm::lookAt(Position, Position + Front, Up);
 }
 
-void Camera::OnMouseMovementEvent(float xoffset, float yoffset,
-                                  bool constrainPitch) {
-  xoffset *= MoveFactor;
-  yoffset *= MoveFactor;
+void Camera::OnMouseMovementEvent(float x, float y) {
+  x *= MoveFactor;
+  y *= MoveFactor;
 
-  RotateZ += xoffset;
-  RotateX += yoffset;
+  RotateZ -= x;
+  RotateX += y;
 
-  // pitch contraints
-  if (constrainPitch) {
-    if (RotateX > 89.0f)
-      RotateX = 89.0f;
-    if (RotateX < -89.0f)
-      RotateX = -89.0f;
-  }
+  if (RotateX > 85.0f)
+    RotateX = 85.0f;
+  if (RotateX < -85.0f)
+    RotateX = -85.0f;
 
   update();
 }
 
 // scroll event
-void Camera::OnMouseScrollEvent(float yoffset) { Position += yoffset * Front; }
+void Camera::OnMouseScrollEvent(float y) { Position += y * Front; }
 
 void Camera::update() {
 

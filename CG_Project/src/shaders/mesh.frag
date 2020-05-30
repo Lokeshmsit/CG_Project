@@ -5,15 +5,17 @@ in vec3 N;
 in vec3 L;
 in vec3 H;
 in vec3 V;
-in vec2 texture_corrdinate;
+in vec2 tex_corrd;
 in vec3 n_model;
+in mat3 TBN;
 
 out vec4 frag_color;
 uniform vec3 u_light_color;
 uniform vec3 u_ambient_color;
-uniform vec3 u_diffuse_color;
 uniform vec3 u_specular_color;
 uniform float u_specular_power;
+uniform mat4 u_mv;
+
 //uniform samplerCube u_cubemap;
 uniform sampler2D tex0;
 uniform sampler2D tex1;
@@ -28,19 +30,26 @@ vec3 R = reflect(-V, N);
 
 void main()
 {
-    float normalization = (8.0 + u_specular_power) / 8.0;
 
-    normal = texture(tex2, texture_corrdinate).rgb;
-    // transform normal vector to range [-1,1]
-    normal = normalize(normal * 2.0 - 1.0);  
+   /*
+    vec3 normal = texture(tex2, tex_corrd).rgb;
+    normal = normal * 2.0 - 1.0;
+    N_normalized = normalize(TBN * normal);
+   */
 
-    N_normalized = normal;
+    //N_normalized = normal;
 
-    vec4 specular_color_tex =  texture(tex1, texture_corrdinate);
+    vec3 normal = texture(tex2, tex_corrd).rgb;
+    N_normalized = normalize(mat3(u_mv) * (n_model + normal.xyz));
+
+    vec4 specular_color_tex =  texture(tex1, tex_corrd);
+
     float  spec_power = specular_color_tex.r*100+1;
     float lambertian = max(dot(L_normalized, N_normalized), 0.0);
 
-    vec3 diff_color_tex =  texture(tex0, texture_corrdinate).rgb;
+    float normalization = (8.0 + spec_power) / 8.0;
+
+    vec3 diff_color_tex =  texture(tex0, tex_corrd).rgb;
 
     float gloss = 1.0 - diff_color_tex.r; 
     float specular_power = exp2(gloss * 10.0);
@@ -48,7 +57,7 @@ void main()
     vec3 Ia = u_ambient_color;
     vec3 Id = diff_color_tex * u_light_color * lambertian;
     vec3 Is = u_specular_color * u_light_color
-             *  normalization * pow(max(0.0,dot(N_normalized, -H_normalized)), specular_power);
+             *  normalization * pow(max(0.0,dot(N_normalized, -H_normalized)), spec_power);
        //Ia +
     vec3 output_color = Id + Is;
 

@@ -51,9 +51,13 @@ include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/../external/lodepng")
 aux_source_directory("${CMAKE_CURRENT_SOURCE_DIR}/../external/imgui" PROJECT_SRCS)
 include_directories(SYSTEM "${CMAKE_CURRENT_SOURCE_DIR}/../external/imgui")
 
+set(SHADER_DIR src/shaders/)
+
+set(OTHER_FILES README.md ${SHADER_DIR}/mesh.vert  ${SHADER_DIR}/mesh.frag)
+
 file(GLOB SRC . *.cpp)
 # Add executable for project
-add_executable(${PROJECT_NAME} ${PROJECT_SRCS} ${SRC})
+add_executable(${PROJECT_NAME} ${PROJECT_SRCS} ${SRC} ${OTHER_FILES})
 
 # Link executable to libraries
 target_link_libraries(${PROJECT_NAME} glfw ${PROJECT_LIBRARIES} ${GLFW_LIBRARIES})

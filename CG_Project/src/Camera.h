@@ -24,9 +24,8 @@ public:
   void setLookAtPosition(const glm::vec3 &lookat);
   void setUpVector(const glm::vec3 &upvec);
 
-  void OnMouseScrollEvent(float yoffset);
-  void OnMouseMovementEvent(float xoffset, float yoffset,
-                            bool constrain_Pitch = true);
+  void OnMouseScrollEvent(float y);
+  void OnMouseMovementEvent(float x, float y);
 
   void update();
 

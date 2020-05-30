@@ -5,14 +5,25 @@ float lastX;
 float lastY;
 bool firstMouse = true;
 
+bool mousePressed = false;
+
 void mouseButtonPressed(Context *ctx, int button, int x, int y) {
+
   if (button == GLFW_MOUSE_BUTTON_LEFT) {
+    mousePressed = true;
+  }
+
+  if (button == GLFW_MOUSE_BUTTON_3) {
+    mousePressed = true;
   }
 }
 
 void mouseButtonReleased(Context *ctx, int button, int x, int y) {
   if (button == GLFW_MOUSE_BUTTON_LEFT) {
   }
+
+  mousePressed = false;
+  firstMouse = true;
 }
 
 void moveTrackball(Context *ctx, int x, int y) {
@@ -86,8 +97,10 @@ void cursorPosCallback(GLFWwindow *window, double x, double y) {
     return;
   } // Skip other handling
 
-  Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
-  moveTrackball(ctx, x, y);
+  if (mousePressed) {
+    Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
+    moveTrackball(ctx, x, y);
+  }
 }
 
 void resizeCallback(GLFWwindow *window, int width, int height) {

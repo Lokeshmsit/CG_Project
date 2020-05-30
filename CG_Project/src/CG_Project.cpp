@@ -12,6 +12,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 #include "Camera.h"
 #include "Terrain.h"
@@ -39,7 +40,7 @@ void init(Context &ctx) {
   Shader *shader =
       new Shader(shaderDir() + "mesh.vert", shaderDir() + "mesh.frag");
   terrain->setShader(shader);
-  terrain->scale(glm::vec3(300.f, 300.f, 300.f));
+  terrain->scale(glm::vec3(500.f, 500.f, 500.f));
   terrain->rotate(-90.f, glm::vec3(1.f, 0.f, 0.f));
 
   ctx.terrain = terrain;
@@ -53,7 +54,7 @@ void init(Context &ctx) {
       new Shader(shaderDir() + "SkyDome.vert", shaderDir() + "SkyDome.frag");
 
   ctx.skydome->load(modelDir() + "Skydome3D/Skydome.obj");
-  ctx.skydome->scale(glm::vec3(2.f, 2.f, 2.f));
+  ctx.skydome->scale(glm::vec3(1.8f, 1.8f, 1.8f));
   ctx.skydome->setShader(shaderSkyDome);
 
   ctx.projection =
