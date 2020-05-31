@@ -79,26 +79,15 @@ void drawImGuiControls(Context &ctx) {
 
   ImGui::Begin("Settings");
 
-  if (ImGui::CollapsingHeader("Material", true)) {
-    ImGui::ColorEdit3("Diffuse Light", &ctx.diffuseColor[0]);
-    ImGui::Checkbox("Diffuse Enabled", &ctx.enableDiffuse);
-    ImGui::ColorEdit3("Specular Light", &ctx.specularColor[0]);
-    ImGui::SliderFloat("Specular Power", &ctx.specularPower, 0.0f, 100.0f);
-    ImGui::Checkbox("Specular Enabled", &ctx.enableSpecular);
-  }
-
   if (ImGui::CollapsingHeader("Lighting", true)) {
     ImGui::ColorEdit3("Light Color", &ctx.lightColor[0]);
-    ImGui::SliderFloat3("Light Position", &ctx.lightPosition[0], 0.0f, 1.0f);
     ImGui::Checkbox("Light Enabled", &ctx.enableLight);
     ImGui::ColorEdit3("Ambiant Light", &ctx.ambientColor[0]);
     ImGui::Checkbox("Ambiant Enabled", &ctx.enableAmbiant);
+    ImGui::ColorEdit3("Specular Light", &ctx.specularColor[0]);
   }
 
-  if (ImGui::CollapsingHeader("Background", true)) {
-    ImGui::ColorEdit3("Background Color : ", &ctx.backgroudColor[0]);
-    ImGui::Checkbox("Perspective Projection", &ctx.enablePerspective);
-  }
+
 
   ImGui::End();
 }

@@ -50,6 +50,9 @@ void Terrain::Render(Context &ctx) {
   glUniformMatrix4fv(glGetUniformLocation(getShader().getProgram(), "u_mvp"), 1,
                      GL_FALSE, &mvp[0][0]);
 
+  glUniform1f(glGetUniformLocation(getShader().getProgram(), "u_time"),
+              ctx.elapsed_time);
+
   glUniform3fv(
       glGetUniformLocation(getShader().getProgram(), "u_light_position"), 1,
       &ctx.lightPosition[0]);
