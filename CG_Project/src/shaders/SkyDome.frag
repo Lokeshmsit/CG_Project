@@ -40,14 +40,7 @@ void main()
   
     vec3 output_color = Ia + Id + Is;
 
-    //vec4 texture_color = texture(tex0, texture_corrdinate);
-    //output_color =  texture_color.rgb;
-
     output_color.rgb = pow(output_color, vec3(1.0 / 2.2)); //applying gamma correction
-
-    //frag_color = vec4(output_color, 1.0);
-
-    //vec3 color = texture(u_cubemap, R).rgb; //texture lookup
 
     frag_color = vec4(output_color, 1.0);
 

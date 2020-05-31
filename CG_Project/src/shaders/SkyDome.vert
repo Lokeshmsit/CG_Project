@@ -18,7 +18,6 @@ out vec3 H;
 uniform mat4 u_mvp;
 uniform mat4 u_mv;
 uniform vec3 u_light_position;
-//uniform int u_cubemap;
 
 void main()
 {

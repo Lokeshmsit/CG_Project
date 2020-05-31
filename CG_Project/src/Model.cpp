@@ -50,6 +50,7 @@ void Model::Render(Context &ctx) {
   glUniform3fv(
       glGetUniformLocation(_shader->getProgram(), "u_specular_color"), 1,
       ctx.enableSpecular ? &ctx.specularColor[0] : &glm::vec3(0.0f)[0]);
+  
   glUniform1f(glGetUniformLocation(_shader->getProgram(), "u_specular_power"),
               ctx.specularPower);
 

@@ -39,12 +39,12 @@ struct Context {
   bool enableLight = true;
 
   glm::vec3 ambientColor = glm::vec3(0.01, 0.1, 0.1);
-  bool enableAmbiant = true;
+  bool enableAmbiant = false;
   glm::vec3 diffuseColor = glm::vec3{0.6, 0.6, 0.6};
   bool enableDiffuse = true;
   glm::vec3 specularColor = glm::vec3(0.04, 0.04, 0.04);
   bool enableSpecular = true;
-  float specularPower = 60.0;
+  float specularPower = 40.0;
 
   glm::vec4 backgroudColor = glm::vec4(0.2, 0.2, 0.2, 1.0);
 
