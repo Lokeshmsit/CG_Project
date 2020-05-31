@@ -40,21 +40,22 @@ void init(Context &ctx) {
   Shader *shader =
       new Shader(shaderDir() + "mesh.vert", shaderDir() + "mesh.frag");
   terrain->setShader(shader);
-  terrain->scale(glm::vec3(500.f, 500.f, 500.f));
+  terrain->scale(glm::vec3(700.f, 700.f, 700.f));
   terrain->rotate(-90.f, glm::vec3(1.f, 0.f, 0.f));
 
   ctx.terrain = terrain;
 
   /*-------camera -------*/
-  ctx.camera = new Camera(glm::vec3(0.0f, 40.0f, 50.0f),
-                          glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0, 1, 0));
+  ctx.camera = new Camera(glm::vec3(0.0f, 60.0f, 50.0f),
+                          glm::vec3(1.0f, 0.0f, -1.0f), glm::vec3(0, 1, 0));
 
   ctx.skydome = new SkyDome;
   Shader *shaderSkyDome =
       new Shader(shaderDir() + "SkyDome.vert", shaderDir() + "SkyDome.frag");
 
   ctx.skydome->load(modelDir() + "Skydome3D/Skydome.obj");
-  ctx.skydome->scale(glm::vec3(1.8f, 1.8f, 1.8f));
+  ctx.skydome->scale(glm::vec3(3.f, 3.f, 3.f));
+  ctx.skydome->translate(glm::vec3(0.0f, -25.f, 0.f));
   ctx.skydome->setShader(shaderSkyDome);
 
   ctx.projection =

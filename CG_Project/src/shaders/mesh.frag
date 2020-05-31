@@ -1,7 +1,6 @@
 // Fragment shader
 #version 150
 
-in vec3 N;
 in vec3 L;
 in vec3 H;
 in vec3 V;
@@ -21,11 +20,9 @@ uniform sampler2D tex1;
 uniform sampler2D tex2;
 
 //normalization after interpolation
-vec3 N_normalized = normalize(N);
+//vec3 N_normalized;
 vec3 L_normalized = normalize(L);
 vec3 H_normalized = normalize(H);
-
-vec3 R = reflect(-V, N);
 
 
 mat3 tangent_space(vec3 eye, vec2 tex_coord, vec3 normal)
@@ -44,19 +41,18 @@ return mat3(T, B, N);
 }
 
 
-
 void main()
 {
 
-   vec3 normalmap = texture(tex2, tex_coord).rgb;
-    normalmap = normalmap * 2.0 - 1.0;
+   vec3 N = texture(tex2, tex_coord).rgb;
+   N = N * 2.0 - 1.0;
    
-   mat3 TBN = tangent_space(V, tex_coord, normalmap);
-   N_normalized = normalize(TBN * normalmap);
+   mat3 TBN = tangent_space(V, tex_coord, N);
+   vec3 N_normalized = normalize(TBN * N);
 
    vec4 specular_color_tex =  texture(tex1, tex_coord);
 
-   float spec_power = specular_color_tex.r*100+1;
+   float spec_power = specular_color_tex.r*30+1;
    float lambertian = max(dot(L_normalized, N_normalized), 0.0);
 
    float normalization = (8.0 + spec_power) / 8.0;

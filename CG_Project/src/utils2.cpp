@@ -199,8 +199,6 @@ bool objMeshUVLoad(OBJMeshUV &mesh, const std::string &filename) {
   f.clear();
   f.seekg(0);
 
-  computeTBN(tmp_mesh);
-
   // Clear old mesh and pre-allocate space for new mesh data
   mesh.vertices.clear();
   mesh.vertices.reserve(tmp_mesh.vertices.size());
@@ -239,9 +237,6 @@ bool objMeshUVLoad(OBJMeshUV &mesh, const std::string &filename) {
             visited[key] = next_index++;
             mesh.vertices.push_back(tmp_mesh.vertices[vindex[i] - 1]);
             mesh.texcoords.push_back(tmp_mesh.texcoords[tindex[i] - 1]);
-
-            mesh.tangents.push_back(tmp_mesh.tangents[vindex[i] - 1]);
-            mesh.bitangents.push_back(tmp_mesh.bitangents[vindex[i] - 1]);
           }
           mesh.indices.push_back(visited[key]);
         }
@@ -254,9 +249,6 @@ bool objMeshUVLoad(OBJMeshUV &mesh, const std::string &filename) {
             visited[key] = next_index++;
             mesh.vertices.push_back(tmp_mesh.vertices[vindex[i] - 1]);
             mesh.normals.push_back(tmp_mesh.normals[nindex[i] - 1]);
-
-            mesh.tangents.push_back(tmp_mesh.tangents[vindex[i] - 1]);
-            mesh.bitangents.push_back(tmp_mesh.bitangents[vindex[i] - 1]);
           }
           mesh.indices.push_back(visited[key]);
         }
@@ -271,9 +263,6 @@ bool objMeshUVLoad(OBJMeshUV &mesh, const std::string &filename) {
             mesh.vertices.push_back(tmp_mesh.vertices[vindex[i] - 1]);
             mesh.texcoords.push_back(tmp_mesh.texcoords[tindex[i] - 1]);
             mesh.normals.push_back(tmp_mesh.normals[nindex[i] - 1]);
-
-            mesh.tangents.push_back(tmp_mesh.tangents[vindex[i] - 1]);
-            mesh.bitangents.push_back(tmp_mesh.bitangents[vindex[i] - 1]);
           }
           mesh.indices.push_back(visited[key]);
         }
@@ -309,8 +298,6 @@ void loadUVMesh(const std::string &filename, OBJMeshUV *mesh) {
   mesh->normals = obj_mesh.normals;
   mesh->indices = obj_mesh.indices;
   mesh->texcoords = obj_mesh.texcoords;
-  mesh->tangents = obj_mesh.tangents;
-  mesh->bitangents = obj_mesh.bitangents;
 }
 
 void createMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO) {
@@ -381,18 +368,6 @@ void createUVMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO) {
   glBufferData(GL_ARRAY_BUFFER, textureNBytes, mesh.texcoords.data(),
                GL_STATIC_DRAW);
 
-  glGenBuffers(1, &(meshVAO->tangentVBO));
-  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->tangentVBO);
-  auto tangentNBytes = mesh.tangents.size() * sizeof(mesh.tangents[0]);
-  glBufferData(GL_ARRAY_BUFFER, tangentNBytes, mesh.tangents.data(),
-               GL_STATIC_DRAW);
-
-  glGenBuffers(1, &(meshVAO->biTangentVBO));
-  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->biTangentVBO);
-  auto biTangentNBytes = mesh.bitangents.size() * sizeof(mesh.bitangents[0]);
-  glBufferData(GL_ARRAY_BUFFER, biTangentNBytes, mesh.bitangents.data(),
-               GL_STATIC_DRAW);
-
   // Creates a vertex array object (VAO) for drawing the mesh
   glGenVertexArrays(1, &(meshVAO->vao));
   glBindVertexArray(meshVAO->vao);
@@ -410,56 +385,10 @@ void createUVMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO) {
   glEnableVertexAttribArray(TEXTURE);
   glVertexAttribPointer(TEXTURE, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->tangentVBO);
-  glEnableVertexAttribArray(TANGENT);
-  glVertexAttribPointer(TANGENT, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
-  glBindBuffer(GL_ARRAY_BUFFER, meshVAO->biTangentVBO);
-  glEnableVertexAttribArray(BITANGENT);
-  glVertexAttribPointer(BITANGENT, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-
   GLuint defaultVAO;
   glBindVertexArray(defaultVAO); // unbinds the VAO
 
   // Additional information required by draw calls
   meshVAO->numVertices = mesh.vertices.size();
   meshVAO->numIndices = mesh.indices.size();
-}
-
-void computeTBN(OBJMeshUV &mesh) {
-
-  for (size_t i = 0; i < mesh.vertices.size(); i += 3) {
-
-    // Shortcuts for vertices
-    glm::vec3 &v0 = mesh.vertices[i + 0];
-    glm::vec3 &v1 = mesh.vertices[i + 1];
-    glm::vec3 &v2 = mesh.vertices[i + 2];
-
-    // Shortcuts for UVs
-    glm::vec2 &uv0 = mesh.texcoords[i + 0];
-    glm::vec2 &uv1 = mesh.texcoords[i + 1];
-    glm::vec2 &uv2 = mesh.texcoords[i + 2];
-
-    // Edges of the triangle : position delta
-    glm::vec3 deltaPos1 = v1 - v0;
-    glm::vec3 deltaPos2 = v2 - v0;
-
-    // UV delta
-    glm::vec2 deltaUV1 = uv1 - uv0;
-    glm::vec2 deltaUV2 = uv2 - uv0;
-
-    float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-    glm::vec3 tangent = f * (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y);
-    glm::vec3 bitangent = f * (deltaPos2 * deltaUV1.x - deltaPos1 * deltaUV2.x);
-
-    // 3 times for all 3 vertices
-    mesh.tangents.push_back(tangent);
-    mesh.tangents.push_back(tangent);
-    mesh.tangents.push_back(tangent);
-
-    // Same thing for bitangents
-    mesh.bitangents.push_back(bitangent);
-    mesh.bitangents.push_back(bitangent);
-    mesh.bitangents.push_back(bitangent);
-  }
 }

@@ -45,10 +45,6 @@ struct OBJMeshUV {
   std::vector<glm::vec3> normals;
   std::vector<glm::vec2> texcoords;
   std::vector<std::uint32_t> indices;
-
-  // for normal mapping
-  std::vector<glm::vec3> tangents;
-  std::vector<glm::vec3> bitangents;
 };
 
 // Helper functions
@@ -89,5 +85,3 @@ void loadUVMesh(const std::string &filename, OBJMeshUV *mesh);
 void createMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO);
 
 void createUVMeshVAO(const OBJMeshUV &mesh, MeshVAO *meshVAO);
-
-void computeTBN(OBJMeshUV &mesh);

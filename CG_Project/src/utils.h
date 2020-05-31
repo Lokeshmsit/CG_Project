@@ -12,13 +12,7 @@
 #include <vector>
 
 // The attribute locations we will use in the vertex shader
-enum AttributeLocation {
-  POSITION = 0,
-  NORMAL = 1,
-  TEXTURE = 2,
-  TANGENT = 3,
-  BITANGENT = 4
-};
+enum AttributeLocation { POSITION = 0, NORMAL = 1, TEXTURE = 2 };
 
 struct MeshVAO {
   GLuint vao;
@@ -26,8 +20,6 @@ struct MeshVAO {
   GLuint normalVBO;
   GLuint indexVBO;
   GLuint textureVBO;
-  GLuint tangentVBO;
-  GLuint biTangentVBO;
 
   std::map<std::string, GLuint> textureMap;
 
