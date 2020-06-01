@@ -25,31 +25,25 @@ void Model::Render(Context &ctx) {
   glUseProgram(_shader->getProgram());
 
   glUniformMatrix4fv(glGetUniformLocation(_shader->getProgram(), "u_mv"), 1,
-                     GL_FALSE, &mv[0][0]);
+              GL_FALSE, &mv[0][0]);
 
   glUniformMatrix4fv(glGetUniformLocation(_shader->getProgram(), "u_mvp"), 1,
-                     GL_FALSE, &mvp[0][0]);
+              GL_FALSE, &mvp[0][0]);
 
-  glUniform1f(glGetUniformLocation(_shader->getProgram(), "u_time"),
-              ctx.elapsed_time);
-
-  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_light_position"),
-               1, &ctx.lightPosition[0]);
+  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_light_position"),1, 
+              &ctx.lightPosition[0]);
 
   glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_light_color"), 1,
-               ctx.enableLight ? &ctx.lightColor[0] : &glm::vec3(0.0f)[0]);
+              ctx.enableLight ? &ctx.lightColor[0] : &glm::vec3(0.0f)[0]);
 
-  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_ambient_color"),
-               1,
-               ctx.enableAmbiant ? &ctx.ambientColor[0] : &glm::vec3(0.0f)[0]);
+  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_ambient_color"),1,
+              ctx.enableAmbiant ? &ctx.ambientColor[0] : &glm::vec3(0.0f)[0]);
 
-  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_diffuse_color"),
-               1,
-               ctx.enableDiffuse ? &ctx.diffuseColor[0] : &glm::vec3(0.0f)[0]);
+  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_diffuse_color"),1, 
+              &ctx.diffuseColor[0]);
 
-  glUniform3fv(
-      glGetUniformLocation(_shader->getProgram(), "u_specular_color"), 1,
-      ctx.enableSpecular ? &ctx.specularColor[0] : &glm::vec3(0.0f)[0]);
+  glUniform3fv(glGetUniformLocation(_shader->getProgram(), "u_specular_color"), 1,
+              &ctx.specularColor[0]);
   glUniform1f(glGetUniformLocation(_shader->getProgram(), "u_specular_power"),
               ctx.specularPower);
 

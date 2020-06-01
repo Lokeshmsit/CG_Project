@@ -82,7 +82,7 @@ void drawImGuiControls(Context &ctx) {
   if (ImGui::CollapsingHeader("Lighting", true)) {
     ImGui::ColorEdit3("Light Color", &ctx.lightColor[0]);
     ImGui::Checkbox("Light Enabled", &ctx.enableLight);
-    ImGui::ColorEdit3("Ambiant Light", &ctx.ambientColor[0]);
+    ImGui::ColorEdit3("Ambient Light", &ctx.ambientColor[0]);
     ImGui::Checkbox("Ambiant Enabled", &ctx.enableAmbiant);
     ImGui::ColorEdit3("Specular Light", &ctx.specularColor[0]);
   }

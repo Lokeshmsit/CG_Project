@@ -108,16 +108,12 @@ void resizeCallback(GLFWwindow *window, int width, int height) {
   ctx->width = width;
   ctx->height = height;
   ctx->aspect = float(width) / float(height);
-  // ctx->trackball->radius = double(std::min(width, height)) / 2.0;
-  // ctx->trackball->center = glm::vec2(width, height) / 2.0f;
   glViewport(0, 0, width, height);
 }
 
 void scrollCallback(GLFWwindow *window, double x, double y) {
 
   Context *ctx = static_cast<Context *>(glfwGetWindowUserPointer(window));
-
-  // ctx->fov += (float)ctx->zoomFactorPerspective * y;
 
   ctx->camera->OnMouseScrollEvent(y);
 }

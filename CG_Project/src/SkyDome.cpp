@@ -31,23 +31,18 @@ void SkyDome::Render(Context &ctx) {
   glUseProgram(getShader().getProgram());
 
   glUniformMatrix4fv(glGetUniformLocation(getShader().getProgram(), "u_mv"), 1,
-                     GL_FALSE, &mv[0][0]);
+      GL_FALSE, &mv[0][0]);
 
   glUniformMatrix4fv(glGetUniformLocation(getShader().getProgram(), "u_mvp"), 1,
-                     GL_FALSE, &mvp[0][0]);
+      GL_FALSE, &mvp[0][0]);
 
-  glUniform1f(glGetUniformLocation(getShader().getProgram(), "u_time"),
-              ctx.elapsed_time);
-
-  glUniform3fv(
-      glGetUniformLocation(getShader().getProgram(), "u_light_position"), 1,
+  glUniform3fv(glGetUniformLocation(getShader().getProgram(), "u_light_position"), 1, 
       &ctx.lightPosition[0]);
 
-  glUniform3fv(glGetUniformLocation(getShader().getProgram(), "u_light_color"),
-               1, ctx.enableLight ? &ctx.lightColor[0] : &glm::vec3(0.0f)[0]);
+  glUniform3fv(glGetUniformLocation(getShader().getProgram(), "u_light_color"), 1, 
+      ctx.enableLight ? &ctx.lightColor[0] : &glm::vec3(0.0f)[0]);
 
-  glUniform3fv(
-      glGetUniformLocation(getShader().getProgram(), "u_ambient_color"), 1,
+  glUniform3fv(glGetUniformLocation(getShader().getProgram(), "u_ambient_color"), 1, 
       ctx.enableAmbiant ? &ctx.ambientColor[0] : &glm::vec3(0.0f)[0]);
 
   glUniform3fv(
@@ -55,8 +50,9 @@ void SkyDome::Render(Context &ctx) {
       ctx.enableDiffuse ? &ctx.diffuseColor[0] : &glm::vec3(0.0f)[0]);
 
   glUniform3fv(
-      glGetUniformLocation(getShader().getProgram(), "u_specular_color"), 1,
-      ctx.enableSpecular ? &ctx.specularColor[0] : &glm::vec3(0.0f)[0]);
+      glGetUniformLocation(getShader().getProgram(), "u_specular_color"), 1, 
+      &ctx.specularColor[0]);
+      
   glUniform1f(
       glGetUniformLocation(getShader().getProgram(), "u_specular_power"),
       ctx.specularPower);
